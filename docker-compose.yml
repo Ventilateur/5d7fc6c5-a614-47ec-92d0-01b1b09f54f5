@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:4.4
+    hostname: database-host
+    container_name: database-container
+    networks:
+      - dataimpact
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: dataimpact
+    volumes:
+      - ./scripts/init.js:/docker-entrypoint-initdb.d/init.js:ro
+
+networks:
+  dataimpact:
+    name: dataimpact

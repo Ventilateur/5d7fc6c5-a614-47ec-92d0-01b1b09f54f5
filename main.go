@@ -7,7 +7,13 @@ import (
 	"github.com/Ventilateur/dataimpact-test/handler"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"os"
 	"time"
+)
+
+var (
+	mongoConn   = os.Getenv("MONGO_CONNECTION_STRING")
+	mongoDBName = os.Getenv("MONGO_DB_NAME")
 )
 
 func main() {
@@ -19,8 +25,8 @@ func main() {
 	// Initialize MongoDB connection
 	db := &database.DB{}
 	err := db.Init(context.Background(), database.Config{
-		ConnectionString: "mongodb://root:root@localhost:27017",
-		DBName:           "dataimpact",
+		ConnectionString: mongoConn,
+		DBName:           mongoDBName,
 	})
 	if err != nil {
 		e.Logger.Fatal(err)
@@ -47,26 +53,4 @@ func main() {
 	e.GET("/user/:id", h.GetUser)
 
 	e.Logger.Fatal(e.Start(":8080"))
-
-	//ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	//defer cancel()
-	//client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://root:root@localhost:27017"))
-	//if err != nil {
-	//    panic(err)
-	//}
-	//collection := client.Database("dataimpact").Collection("user_auth")
-	//
-	//ret := db.UserAuthDAO{}
-	//
-	//result := collection.FindOne(ctx, bson.M{"id": "rooot"})
-	//if result.Err() == mongo.ErrNoDocuments {
-	//    fmt.Println("HAHAHA")
-	//}
-	//fmt.Printf("%+v\n", result.Err())
-	//
-	//if err := result.Decode(&ret); err != nil {
-	//    panic(err)
-	//}
-	//
-	//fmt.Printf("%+v", ret)
 }

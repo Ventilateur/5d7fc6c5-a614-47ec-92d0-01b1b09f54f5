@@ -5,8 +5,6 @@ services:
     image: mongo:4.4
     hostname: database-host
     container_name: database-container
-    networks:
-      - dataimpact
     ports:
       - 27017:27017
     environment:
@@ -16,6 +14,12 @@ services:
     volumes:
       - ./scripts/init.js:/docker-entrypoint-initdb.d/init.js:ro
 
-networks:
   dataimpact:
-    name: dataimpact
+    build:
+      context: .
+    container_name: dataimpact-container
+    ports:
+      - 8080:8080
+    environment:
+      MONGO_CONNECTION_STRING: "mongodb://root:root@database-host:27017"
+      MONGO_DB_NAME: dataimpact

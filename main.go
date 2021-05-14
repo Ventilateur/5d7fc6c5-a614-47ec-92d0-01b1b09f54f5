@@ -17,6 +17,7 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	// Read config
 	conf, err := config.GetConfig()
 	if err != nil {
 		e.Logger.Fatal(err)

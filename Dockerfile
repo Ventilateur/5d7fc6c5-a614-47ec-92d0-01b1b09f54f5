@@ -13,6 +13,7 @@ FROM alpine:3.13
 EXPOSE 8080
 
 WORKDIR /app
+COPY --from=builder /app/config.yaml /app/
 COPY --from=builder /app/dataimpact /app/
 
 ENTRYPOINT ["./dataimpact"]

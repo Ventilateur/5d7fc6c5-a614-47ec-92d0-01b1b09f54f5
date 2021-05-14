@@ -37,6 +37,7 @@ for 5 minutes only.
 ### Code
 
 * Unit tests and functional tests are to be added.
+* Implementing JSON input validator.
 * Better error handling. Right now only green paths are correctly handled, many edge cases leads to error 500 where 
   they should not.
 * Using `[]byte` instead of `string` for sensitive data.

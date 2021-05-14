@@ -12,8 +12,9 @@ import (
 )
 
 var (
-	mongoConn   = os.Getenv("MONGO_CONNECTION_STRING")
-	mongoDBName = os.Getenv("MONGO_DB_NAME")
+	mongoConn     = os.Getenv("MONGO_CONNECTION_STRING")
+	mongoDBName   = os.Getenv("MONGO_DB_NAME")
+	jwtSigningKey = []byte(os.Getenv("JWT_SIGNING_KEY"))
 )
 
 func main() {
@@ -41,12 +42,21 @@ func main() {
 	// Initialize JWT tokenizer
 	t := &handler.Tokenizer{
 		TokenDuration: time.Minute * 10,
-		SigningKey:    []byte("dataimpact"),
+		SigningKey:    jwtSigningKey,
 	}
 
 	// Initialize HTTP handler
 	h := handler.Handler{}
 	h.Init(db, fs, t)
+
+	// JWT authorization
+	e.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		SigningKey:  jwtSigningKey,
+		TokenLookup: "header:" + echo.HeaderAuthorization,
+		Skipper: func(c echo.Context) bool {
+			return "/login" == c.Request().URL.Path
+		},
+	}))
 
 	e.POST("/login", h.Login)
 	e.POST("/create", h.CreateUser)

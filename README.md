@@ -15,8 +15,9 @@ make up
 
 ### Minimal tests
 
-Import the [Postman collection](postman/minimal_test_collection.json) to Postman and run it. Make sure the file in 
-`Create users` request point to [sample_data.json](postman/sample_data.json).
+Import the [Postman collection](postman/minimal_test_collection.json) to Postman and run it. 
+
+**Important:** Make sure the file in `Create users` request point to [sample_data.json](postman/sample_data.json).
 
 If you encounter a 401 error saying the JWT token is expired, rerun one of the login requests, since the token is valid 
 for 5 minutes only.
@@ -36,6 +37,8 @@ for 5 minutes only.
 ### Code
 
 * Unit tests and functional tests are to be added.
+* Better error handling. Right now only green paths are correctly handled, many edge cases leads to error 500 where 
+  they should not.
 * Using `[]byte` instead of `string` for sensitive data.
 * Bcrypt seems to have a max length constraint, so the password cannot be combined with the user ID (very long) to form 
   a better credentials.

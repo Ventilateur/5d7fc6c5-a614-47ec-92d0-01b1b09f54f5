@@ -76,7 +76,7 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/Users/vhphan/Workspace/personal/dataimpact-test/sample_data.json"
+							"src": "postman/sample_data.json"
 						}
 					]
 				},

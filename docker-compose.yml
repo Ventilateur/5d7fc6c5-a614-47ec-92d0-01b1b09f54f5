@@ -22,4 +22,4 @@ services:
       - 8080:8080
     environment:
       MONGO_CONNECTION_STRING: "mongodb://root:root@database-host:27017"
-      MONGO_DB_NAME: dataimpact
+      JWT_SIGNING_KEY: dataimpact

@@ -1,0 +1,8 @@
+mongo:
+  database_name: dataimpact
+
+jwt:
+  duration_min: 5
+
+user_data_dir: userdata
+listen_port: 8080

@@ -40,3 +40,7 @@ func (fs *FileStorage) Get(fileName string) (string, error) {
 	content, err := ioutil.ReadFile(fmt.Sprintf("%s/%s", fs.DirName, fileName))
 	return string(content), err
 }
+
+func (fs *FileStorage) Delete(fileName string) error {
+	return os.Remove(fmt.Sprintf("%s/%s", fs.DirName, fileName))
+}

@@ -67,3 +67,30 @@ func (db *DB) GetUser(c context.Context, userId string) (UserInfoDAO, error) {
 	}
 	return userInfo, result.Decode(&userInfo)
 }
+
+func (db *DB) ListUsers(c context.Context) (map[string]UserInfoDAO, error) {
+	cursor, err := db.users.Find(c, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(c)
+
+	userInfoMap := map[string]UserInfoDAO{}
+	for cursor.Next(c) {
+		userInfo := UserInfoDAO{}
+		if err := cursor.Decode(&userInfo); err != nil {
+			return nil, err
+		}
+		userInfoMap[userInfo.Id] = userInfo
+	}
+
+	return userInfoMap, nil
+}
+
+func (db *DB) DeleteUser(c context.Context, userId string) (int64, error) {
+	result, err := db.users.DeleteOne(c, bson.M{"id": userId})
+	if err != nil {
+		return 0, err
+	}
+	return result.DeletedCount, nil
+}

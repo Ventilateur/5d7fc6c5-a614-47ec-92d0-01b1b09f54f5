@@ -88,3 +88,42 @@ func (h *Handler) GetUser(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, response)
 }
+
+func (h *Handler) ListUsers(c echo.Context) error {
+	userInfoMap, err := h.db.ListUsers(c.Request().Context())
+	if err != nil {
+		return err
+	}
+	userInfoList := make([]GetUserResponse, 0, len(userInfoMap))
+	for userId, userInfoDAO := range userInfoMap {
+		userInfo := GetUserResponse{}
+		userInfo.FromUserInfoDAO(userInfoDAO)
+
+		data, err := h.fs.Get(userId)
+		if err != nil {
+			return err
+		}
+		userInfo.Data = data
+
+		userInfoList = append(userInfoList, userInfo)
+	}
+
+	return c.JSON(http.StatusOK, userInfoList)
+}
+
+func (h *Handler) DeleteUser(c echo.Context) error {
+	userId := c.Param("id")
+	count, err := h.db.DeleteUser(c.Request().Context(), userId)
+	if err != nil {
+		return err
+	}
+	if count == 0 {
+		return c.JSON(http.StatusNotFound, jsonMsg(fmt.Sprintf("User %s not found", userId)))
+	}
+
+	if err := h.fs.Delete(userId); err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, jsonMsg("Deleted"))
+}

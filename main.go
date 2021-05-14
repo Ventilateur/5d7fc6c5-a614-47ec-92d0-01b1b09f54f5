@@ -51,6 +51,8 @@ func main() {
 	e.POST("/login", h.Login)
 	e.POST("/create", h.CreateUser)
 	e.GET("/user/:id", h.GetUser)
+	e.GET("/users/list", h.ListUsers)
+	e.DELETE("/delete/user/:id", h.DeleteUser)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
